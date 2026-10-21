@@ -1,0 +1,379 @@
+<title>NGL Card</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300..700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: uma coluna de celular, faixa royal no topo, cartão índigo por aluno, relógio vivo como prova antifraude. Visual único "Noite" da marca NGL. */
+:root {
+  --night: #020058;
+  --indigo: #302c80;
+  --panel: #1d1e76;
+  --royal: #0152be;
+  --ink: #ffffff;
+  --muted: #a9b3e0;
+  --muted-2: #c9d3ee;
+  --gold: #fbb03b;
+  --done: #01b43a;
+  --pending: #a9b3e0;
+  --on-status: #020058;
+  --cta: #01844c;
+  --shadow-cta: #000062;
+  --line: #ffffff33;
+  --it-green: #178b38;
+  --it-red: #e21815;
+  --display: "Yanone Kaffeesatz", "Arial Narrow", sans-serif;
+  --data: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { background: var(--night); color: var(--ink); }
+body {
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.35;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+.wrap { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }
+.banner {
+  display: inline-flex; align-items: center; background: var(--royal); color: var(--ink);
+  font-weight: 700; font-style: italic; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 26px; line-height: 1; padding: 12px 48px 12px max(16px, env(safe-area-inset-left, 0px));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 36px) 100%, 0 100%);
+}
+.sig { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); text-align: right; }
+.tricolor { display: block; height: 5px; background: linear-gradient(90deg, var(--it-green) 0 33.333%, var(--ink) 33.333% 66.666%, var(--it-red) 66.666% 100%); }
+h1, h2 { font-family: var(--display); font-weight: 700; text-transform: uppercase; margin: 0; line-height: 1; text-wrap: balance; }
+h1 { font-size: 44px; }
+h2 { font-size: 24px; line-height: 1.1; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.label { font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+
+/* Entrada */
+.login { display: flex; flex-direction: column; gap: 20px; }
+.login .lead { font-size: 20px; color: var(--muted-2); max-width: 34ch; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label { font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.field input {
+  font-family: var(--data); font-size: 22px; font-weight: 500; color: var(--ink);
+  background: var(--panel); border: 2px solid var(--line); border-radius: 0;
+  padding: 14px 16px; width: 100%; box-sizing: border-box; letter-spacing: 0.02em;
+}
+.field input:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-color: var(--muted); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px;
+  background: var(--cta); color: var(--ink); border: 3px solid var(--ink); border-radius: 0;
+  box-shadow: 4px 4px 0 var(--shadow-cta); font-family: var(--display); font-weight: 700;
+  font-size: 24px; letter-spacing: 0.02em; text-transform: uppercase; padding: 10px 24px; cursor: pointer; width: 100%;
+}
+.btn:active { box-shadow: none; transform: translate(4px, 4px); }
+.btn:focus-visible, .linkbtn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.btn[disabled] { opacity: 0.6; cursor: progress; }
+.msg { font-size: 18px; line-height: 1.3; padding: 12px 16px; background: var(--panel); border: 1px solid var(--line); }
+.msg strong { color: var(--gold); }
+.linkbtn { background: none; border: 0; color: var(--muted); font-family: var(--display); font-size: 17px; text-transform: uppercase; letter-spacing: 0.04em; text-decoration: underline; text-underline-offset: 3px; padding: 8px 0; cursor: pointer; align-self: flex-start; }
+
+/* Relógio antifraude */
+.live { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--line); padding: 12px 16px; }
+.live .clock { font-family: var(--data); font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+.live .date { font-family: var(--data); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: var(--muted-2); text-transform: uppercase; text-align: right; }
+.pulse { display: inline-block; width: 10px; height: 10px; border-radius: 999px; background: var(--done); margin-right: 8px; animation: pulse 1.2s ease-in-out infinite; vertical-align: middle; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.7); } }
+.runner { position: relative; overflow: hidden; height: 5px; background: var(--indigo); }
+.runner::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, var(--it-green) 0 33.333%, var(--ink) 33.333% 66.666%, var(--it-red) 66.666% 100%); animation: run 2.4s linear infinite; }
+@keyframes run { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+
+/* Cartão */
+.cards { display: flex; flex-direction: column; gap: 16px; }
+.card { background: var(--indigo); display: flex; flex-direction: column; gap: 14px; padding: 22px 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px -16px rgba(0,0,0,0.6); }
+.card .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.card .who { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.card .name { font-size: 38px; font-weight: 700; line-height: 0.95; text-transform: uppercase; overflow-wrap: anywhere; }
+.card .tri { width: 120px; }
+.statusrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: 6px; color: var(--on-status); font-weight: 700; font-size: 20px; letter-spacing: 0.04em; text-transform: uppercase; padding: 7px 14px; border-radius: 999px; }
+.pill.ok { background: var(--done); }
+.pill.no { background: var(--pending); }
+.month { font-size: 24px; font-weight: 700; text-transform: uppercase; color: var(--gold); }
+.card.off .month { color: var(--muted); }
+.card .foot { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px dashed var(--line); font-family: var(--data); font-size: 12px; font-weight: 500; color: var(--muted-2); letter-spacing: 0.04em; flex-wrap: wrap; }
+.card .note { font-size: 18px; line-height: 1.3; color: var(--ink); }
+
+.check { display: flex; flex-direction: column; gap: 10px; background: transparent; border: 1px solid var(--line); padding: 16px; }
+.check ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; font-size: 18px; line-height: 1.3; }
+
+.partners { display: flex; flex-direction: column; gap: 12px; }
+.partners .title { display: inline-flex; flex-direction: column; gap: 6px; align-self: flex-start; }
+.plist { display: flex; flex-direction: column; gap: 8px; }
+.pitem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--line); padding: 12px 16px; }
+.pitem .pi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pitem .pn { font-size: 22px; font-weight: 700; text-transform: uppercase; line-height: 1.05; }
+.pitem .pa { font-size: 15px; color: var(--muted); line-height: 1.2; }
+.pitem .pb { font-size: 22px; font-weight: 700; color: var(--gold); text-align: right; }
+.empty { font-size: 18px; color: var(--muted-2); padding: 14px 16px; border: 1px dashed var(--line); }
+
+.stale { background: var(--gold); color: var(--on-status); padding: 12px 16px; font-size: 18px; line-height: 1.25; font-weight: 700; }
+.codebox { display: flex; flex-direction: column; gap: 10px; background: var(--panel); border: 2px solid var(--gold); padding: 18px 16px; }
+.codebox .code { font-family: var(--data); font-size: 34px; font-weight: 600; letter-spacing: 0.08em; color: var(--gold); font-variant-numeric: tabular-nums; user-select: all; }
+.codebox p { font-size: 17px; line-height: 1.3; color: var(--muted-2); }
+.btn.sec { background: transparent; box-shadow: none; border-color: var(--muted); font-size: 20px; min-height: 48px; }
+.result { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 32px 20px; text-align: center; color: var(--on-status); }
+.result.ok { background: var(--done); }
+.result.no { background: var(--pending); }
+.result .big { font-size: 46px; font-weight: 700; line-height: 0.95; text-transform: uppercase; }
+.result .sub { font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.result .meta { font-family: var(--data); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; }
+footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .pulse, .runner::after { animation: none; } }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <span class="banner">NGL Card</span>
+    <span class="sig">Nucleo Gabriel Lima</span>
+  </div>
+
+  <section id="login" class="login" aria-labelledby="t-login">
+    <h1 id="t-login">Cartão de vantagens da família</h1>
+    <p class="lead">Digite o WhatsApp do responsável cadastrado na NGL. O cartão abre com todos os alunos da família e fica salvo neste celular.</p>
+    <form id="f" class="login" novalidate>
+      <div class="field">
+        <label for="tel">WhatsApp do responsável</label>
+        <input id="tel" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 90000-0000" maxlength="16">
+      </div>
+      <button id="go" class="btn" type="submit">Abrir cartão</button>
+    </form>
+    <p id="err" class="msg" hidden></p>
+    <button id="toPartner" class="linkbtn" type="button">Sou parceiro: validar código de cliente</button>
+  </section>
+
+  <section id="parceiro" class="login" aria-labelledby="t-parc" hidden>
+    <h1 id="t-parc">Validar código NGL Card</h1>
+    <p class="lead">Para vendas pelo WhatsApp ou a distância: peça à família o código do dia que aparece no cartão e digite abaixo.</p>
+    <form id="fc" class="login" novalidate>
+      <div class="field">
+        <label for="cod">Código do dia</label>
+        <input id="cod" name="cod" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD-1234" maxlength="12">
+      </div>
+      <button id="val" class="btn" type="submit">Validar</button>
+    </form>
+    <div id="res" hidden></div>
+    <button id="back" class="linkbtn" type="button">Voltar ao cartão da família</button>
+  </section>
+
+  <section id="app" hidden>
+    <div class="wrap">
+      <p id="stale" class="stale" hidden></p>
+      <div>
+        <div class="live" aria-live="off">
+          <span><span class="pulse" aria-hidden="true"></span><span id="clock" class="clock">--:--:--</span></span>
+          <span id="today" class="date"></span>
+        </div>
+        <div class="runner" aria-hidden="true"></div>
+      </div>
+      <div id="cards" class="cards"></div>
+      <div id="codebox" class="codebox" hidden>
+        <span class="label">Código do dia para parceiros</span>
+        <span id="code" class="code"></span>
+        <p>Comprando pelo WhatsApp ou a distância? Envie este código ao parceiro. Ele confere no mesmo link, em "Sou parceiro". O código muda todo dia.</p>
+        <button id="copy" class="btn sec" type="button">Copiar código</button>
+      </div>
+      <div class="check">
+        <h2>Para o parceiro conferir</h2>
+        <ol>
+          <li>O relógio está andando e a data é a de hoje.</li>
+          <li>O status está verde: <strong>ATIVO</strong>.</li>
+          <li>Vale para toda a família do aluno, sem cadastro.</li>
+          <li>A distância, valide o código do dia em "Sou parceiro".</li>
+        </ol>
+      </div>
+      <section class="partners" aria-labelledby="t-p">
+        <div class="title"><h2 id="t-p">Parceiros do mês</h2><span class="tricolor"></span></div>
+        <div id="plist" class="plist"></div>
+      </section>
+      <button id="out" class="linkbtn" type="button">Usar outro número</button>
+    </div>
+  </section>
+
+  <footer>NGL Futsal · lista de alunos atualizada automaticamente todos os dias</footer>
+</div>
+
+<script id="ngl-dados" type="application/json">{"gerado":"2026-10-21T15:45:00-03:00","mes":"2026-10","salt":"/lat4zSGaMOMVe81pCD9rA==","iter":150000,"iterCod":20000,"codigos":{"4e67a1ea34b927d2f373cf5b1f25012b":{"iv":"mJpEP/xX1GRljy19","ct":"smuDjn9GTHXfkgJrsfBzdrazBv2ISVXbyIB03shrN407NfsC05oLw3t7nlUxRQk="}},"parceiros":[],"familias":{"2a6d2c5b813741aa6015e071892fab8c":{"iv":"Aonta8IcXupPUcJz","ct":"AA08s9JG1rzqaBMv5K9PzFktGgwi2YlblmmcK0pcHyQAgvX8TrM46fkkgCtsJP8O9B1ISETyA9L01DAC9xsY7HiDHZF0eyqx7g6564La+TsK6B6GDgUxBZZSkH4Ted8lvEuHiop45z/nUB316oraO/S1iroAAZC43fHKUOaAPRYJM2HoxrhCba+wDzRUhyMUgAH3+ZemLh4="}}}</script>
+<script>
+(function () {
+  "use strict";
+  var MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  var DIAS = ["dom","seg","ter","qua","qui","sex","sáb"];
+  var KEY = "ngl-card-tel";
+  var D = JSON.parse(document.getElementById("ngl-dados").textContent);
+  var $ = function (id) { return document.getElementById(id); };
+
+  function b64(s) { var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+  function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+  function digits(v) {
+    var d = String(v || "").replace(/\D/g, "");
+    if (d.length >= 12 && d.indexOf("55") === 0) d = d.slice(2);
+    if (d.length === 11 || d.length === 10) return d;
+    return null;
+  }
+  function fmt(d) { return d.length === 11 ? "(" + d.slice(0, 2) + ") " + d.slice(2, 7) + "-" + d.slice(7) : "(" + d.slice(0, 2) + ") " + d.slice(2, 6) + "-" + d.slice(6); }
+  function store(get, val) { try { if (get) return localStorage.getItem(KEY); if (val === null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, val); } catch (e) { return null; } }
+
+  async function abrirEm(segredo, iter, tabela) {
+    var enc = new TextEncoder();
+    var base = await crypto.subtle.importKey("raw", enc.encode(segredo), "PBKDF2", false, ["deriveBits"]);
+    var bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: b64(D.salt), iterations: iter }, base, 512);
+    var id = hex(bits.slice(32, 48));
+    var rec = tabela && tabela[id];
+    if (!rec) return null;
+    var key = await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-GCM", false, ["decrypt"]);
+    var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(rec.iv) }, key, b64(rec.ct));
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+  function abrir(tel) { return abrirEm(tel, D.iter, D.familias); }
+  function limpaCod(v) { return String(v || "").toUpperCase().replace(/[^0-9A-Z]/g, ""); }
+  function fmtCod(c) { return c.slice(0, 4) + "-" + c.slice(4); }
+
+  function mesTxt(ym) { var p = ym.split("-"); return MESES[+p[1] - 1] + " " + p[0]; }
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+
+  function cartoes(fam) {
+    var box = $("cards"); box.textContent = "";
+    var g = new Date(D.gerado);
+    fam.alunos.forEach(function (a) {
+      var ok = a.status === "ativo";
+      var c = el("article", "card" + (ok ? "" : " off"));
+      var head = el("div", "head");
+      var who = el("div", "who");
+      who.appendChild(el("span", "label", "Família do(a)"));
+      who.appendChild(el("span", "name", a.nome));
+      head.appendChild(who);
+      c.appendChild(head);
+      var t = el("span", "tricolor tri"); c.appendChild(t);
+      var row = el("div", "statusrow");
+      var pill = el("span", "pill " + (ok ? "ok" : "no"), ok ? "✓ Ativo" : "Inativo");
+      row.appendChild(pill);
+      row.appendChild(el("span", "month", mesTxt(D.mes)));
+      c.appendChild(row);
+      if (!ok) c.appendChild(el("p", "note", "Este cartão não está ativo neste mês. O desconto não vale até a situação ser regularizada com a NGL."));
+      var foot = el("div", "foot");
+      foot.appendChild(el("span", null, "LISTA NGL " + ("0" + g.getDate()).slice(-2) + "/" + ("0" + (g.getMonth() + 1)).slice(-2) + " " + ("0" + g.getHours()).slice(-2) + "H" + ("0" + g.getMinutes()).slice(-2)));
+      foot.appendChild(el("span", null, "VÁLIDO EM " + mesTxt(D.mes).toUpperCase()));
+      c.appendChild(foot);
+      box.appendChild(c);
+    });
+  }
+
+  function parceiros() {
+    var box = $("plist"); box.textContent = "";
+    var ps = D.parceiros || [];
+    if (!ps.length) { box.appendChild(el("p", "empty", "Os primeiros parceiros entram em breve. A lista aparece aqui assim que forem confirmados.")); return; }
+    ps.forEach(function (p) {
+      var it = el("div", "pitem"), pi = el("div", "pi");
+      if (p.categoria) pi.appendChild(el("span", "label", p.categoria));
+      pi.appendChild(el("span", "pn", p.nome));
+      if (p.endereco) pi.appendChild(el("span", "pa", p.endereco));
+      it.appendChild(pi);
+      it.appendChild(el("span", "pb", p.beneficio || ""));
+      box.appendChild(it);
+    });
+  }
+
+  function relogio() {
+    var n = new Date();
+    $("clock").textContent = ("0" + n.getHours()).slice(-2) + ":" + ("0" + n.getMinutes()).slice(-2) + ":" + ("0" + n.getSeconds()).slice(-2);
+    $("today").textContent = DIAS[n.getDay()] + " " + ("0" + n.getDate()).slice(-2) + "/" + ("0" + (n.getMonth() + 1)).slice(-2) + "/" + n.getFullYear();
+  }
+
+  function mostrar(fam) {
+    $("login").hidden = true; $("app").hidden = false;
+    var idade = (Date.now() - new Date(D.gerado).getTime()) / 36e5;
+    var st = $("stale");
+    if (idade > 72) { st.hidden = false; st.textContent = "Atenção: a lista de alunos não é atualizada desde " + new Date(D.gerado).toLocaleDateString("pt-BR") + ". Confirme com a NGL antes de aplicar o desconto."; }
+    cartoes(fam); parceiros(); relogio();
+    var cb = $("codebox");
+    if (fam.codigo) { cb.hidden = false; $("code").textContent = fmtCod(fam.codigo); } else { cb.hidden = true; }
+  }
+
+  function erro(txt) { var e = $("err"); e.hidden = false; e.textContent = txt; }
+
+  $("f").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    $("err").hidden = true;
+    var d = digits($("tel").value);
+    if (!d) { erro("Digite o número com DDD, por exemplo (11) 91234-5678."); return; }
+    var b = $("go"); b.disabled = true; b.textContent = "Abrindo…";
+    try {
+      var fam = await abrir(d);
+      if (!fam) { erro("Não encontramos esse número na lista da NGL. Use o WhatsApp do responsável que está no cadastro ou fale com a secretaria da NGL."); return; }
+      store(false, d); mostrar(fam);
+    } catch (e) { erro("Não foi possível abrir o cartão neste navegador. Tente de novo ou abra pelo Chrome ou Safari."); }
+    finally { b.disabled = false; b.textContent = "Abrir cartão"; }
+  });
+
+  $("tel").addEventListener("input", function () {
+    var d = this.value.replace(/\D/g, "").slice(0, 11);
+    if (d.length > 6) this.value = "(" + d.slice(0, 2) + ") " + d.slice(2, d.length === 11 ? 7 : 6) + "-" + d.slice(d.length === 11 ? 7 : 6);
+    else if (d.length > 2) this.value = "(" + d.slice(0, 2) + ") " + d.slice(2);
+    else this.value = d;
+  });
+
+  $("out").addEventListener("click", function () { store(false, null); $("app").hidden = true; $("login").hidden = false; $("tel").value = ""; $("tel").focus(); });
+
+  function telaParceiro(on) {
+    $("parceiro").hidden = !on;
+    if (on) { $("login").hidden = true; $("app").hidden = true; $("res").hidden = true; $("cod").value = ""; }
+    else { $("login").hidden = false; }
+  }
+  $("toPartner").addEventListener("click", function () { telaParceiro(true); $("cod").focus(); });
+  $("back").addEventListener("click", function () {
+    telaParceiro(false);
+    var s = store(true);
+    if (s && digits(s)) abrir(s).then(function (fam) { if (fam) mostrar(fam); }).catch(function () {});
+  });
+  $("cod").addEventListener("input", function () { var c = limpaCod(this.value).slice(0, 8); this.value = c.length > 4 ? fmtCod(c) : c; });
+  $("fc").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var c = limpaCod($("cod").value), r = $("res");
+    r.hidden = false; r.className = "result no"; r.textContent = "";
+    if (c.length !== 8) { r.appendChild(el("span", "sub", "Digite os 8 caracteres do código")); return; }
+    var b = $("val"); b.disabled = true; b.textContent = "Validando…";
+    try {
+      var info = await abrirEm(c, D.iterCod, D.codigos);
+      var g = new Date(D.gerado);
+      if (info) {
+        r.className = "result ok";
+        r.appendChild(el("span", "big", "Código válido"));
+        r.appendChild(el("span", "sub", "Família do(a) " + info.nomes.join(" e ")));
+        r.appendChild(el("span", "sub", "Pode aplicar o desconto"));
+      } else {
+        r.appendChild(el("span", "big", "Código inválido"));
+        r.appendChild(el("span", "sub", "Não aplique o desconto"));
+        r.appendChild(el("span", "meta", "O código pode ser de outro dia ou a família não está ativa."));
+      }
+      r.appendChild(el("span", "meta", "LISTA NGL " + g.toLocaleDateString("pt-BR") + " · " + new Date().toLocaleString("pt-BR")));
+    } catch (e) { r.appendChild(el("span", "sub", "Não foi possível validar neste navegador. Tente pelo Chrome ou Safari.")); }
+    finally { b.disabled = false; b.textContent = "Validar"; }
+  });
+  $("copy").addEventListener("click", function () {
+    var t = $("code").textContent, btn = this;
+    function ok() { btn.textContent = "Código copiado"; setTimeout(function () { btn.textContent = "Copiar código"; }, 2000); }
+    try { navigator.clipboard.writeText(t).then(ok, function () { selecionar(); }); } catch (e) { selecionar(); }
+    function selecionar() { var rg = document.createRange(); rg.selectNodeContents($("code")); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); btn.textContent = "Código selecionado"; }
+  });
+
+  setInterval(relogio, 1000);
+  parceiros();
+
+  var salvo = store(true);
+  window.addEventListener("hashchange", function () { if (location.hash === "#parceiro") telaParceiro(true); });
+  if (location.hash === "#parceiro") { telaParceiro(true); }
+  else if (salvo && digits(salvo)) {
+    $("tel").value = fmt(salvo);
+    abrir(salvo).then(function (fam) { if (fam) mostrar(fam); }).catch(function () {});
+  }
+})();
+</script>
