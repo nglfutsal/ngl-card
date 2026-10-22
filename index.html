@@ -113,6 +113,9 @@ p { margin: 0; }
 .pitem .pn { font-size: 22px; font-weight: 700; text-transform: uppercase; line-height: 1.05; }
 .pitem .pa { font-size: 15px; color: var(--muted); line-height: 1.2; }
 .pitem .pb { font-size: 22px; font-weight: 700; color: var(--gold); text-align: right; }
+.pitem .pl { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 4px; }
+.pitem .pl a { font-size: 16px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; }
+.pitem .pl a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .empty { font-size: 18px; color: var(--muted-2); padding: 14px 16px; border: 1px dashed var(--line); }
 
 .stale { background: var(--gold); color: var(--on-status); padding: 12px 16px; font-size: 18px; line-height: 1.25; font-weight: 700; }
@@ -201,7 +204,7 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
   <footer>NGL Futsal · lista de alunos atualizada automaticamente todos os dias</footer>
 </div>
 
-<script id="ngl-dados" type="application/json">{"gerado":"2026-10-21T15:45:00-03:00","mes":"2026-10","salt":"/lat4zSGaMOMVe81pCD9rA==","iter":150000,"iterCod":20000,"codigos":{"4e67a1ea34b927d2f373cf5b1f25012b":{"iv":"mJpEP/xX1GRljy19","ct":"smuDjn9GTHXfkgJrsfBzdrazBv2ISVXbyIB03shrN407NfsC05oLw3t7nlUxRQk="}},"parceiros":[],"familias":{"2a6d2c5b813741aa6015e071892fab8c":{"iv":"Aonta8IcXupPUcJz","ct":"AA08s9JG1rzqaBMv5K9PzFktGgwi2YlblmmcK0pcHyQAgvX8TrM46fkkgCtsJP8O9B1ISETyA9L01DAC9xsY7HiDHZF0eyqx7g6564La+TsK6B6GDgUxBZZSkH4Ted8lvEuHiop45z/nUB316oraO/S1iroAAZC43fHKUOaAPRYJM2HoxrhCba+wDzRUhyMUgAH3+ZemLh4="}}}</script>
+<script id="ngl-dados" type="application/json">{"gerado":"2026-10-22T11:26:00-03:00","mes":"2026-10","salt":"83wb8wP1PG0pv5spcs+5yA==","iter":150000,"iterCod":20000,"codigos":{"d0cc9acd39040a0814683800e5b6632c":{"iv":"fJ8jBXLCnNiYEjdd","ct":"y13aJF0LP470IgiQryIYBNk5J2uOl/Q8n/9S1f6e564QSq84+y+UElc2mgCDKvE="}},"parceiros":[{"categoria":"Psicólogo esportivo","nome":"Fabio Galli","beneficio":"12% OFF","endereco":"Em todas as sessões para famílias NGL","instagram":"fabricadeatletas_fabiogalli","whatsapp":"(11) 99173-8936"}],"familias":{"abcd81c9eed30b82c9476f91beb84419":{"iv":"549CG9Sjze4S23bL","ct":"pd5fwv69haGqoDEYXKDnJf8XLFPaiqo3zIwXT6+7Tzz8IOr+QyApgJ4aZXzIsrUJZM7gG5VsPyMwJZ5OBiL3BnMsSLDIWYFDxIonCWCIcysTb//NjK37xkgLD2RIpbF9zc2ZXNVG+ndX6dJjrbIIJCDOhkrOH6Na67wEw5tGiG4zukACV7AOrZ6BjxBSG38n7z9xmAfrsVU="}}}</script>
 <script>
 (function () {
   "use strict";
@@ -276,6 +279,10 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
       if (p.categoria) pi.appendChild(el("span", "label", p.categoria));
       pi.appendChild(el("span", "pn", p.nome));
       if (p.endereco) pi.appendChild(el("span", "pa", p.endereco));
+      var links = el("div", "pl"), n = 0;
+      if (p.whatsapp) { var w = digits(p.whatsapp); if (w) { var a = el("a", null, "WhatsApp " + fmt(w)); a.href = "https://wa.me/55" + w + "?text=" + encodeURIComponent("Olá! Sou família NGL Futsal e quero usar o benefício do NGL Card."); a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); n++; } }
+      if (p.instagram) { var ig = String(p.instagram).replace(/^@/, ""); var b2 = el("a", null, "@" + ig); b2.href = "https://instagram.com/" + encodeURIComponent(ig); b2.target = "_blank"; b2.rel = "noopener"; links.appendChild(b2); n++; }
+      if (n) pi.appendChild(links);
       it.appendChild(pi);
       it.appendChild(el("span", "pb", p.beneficio || ""));
       box.appendChild(it);
