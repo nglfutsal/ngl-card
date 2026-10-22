@@ -62,6 +62,9 @@ p { margin: 0; }
   background: var(--panel); border: 2px solid var(--line); border-radius: 0;
   padding: 14px 16px; width: 100%; box-sizing: border-box; letter-spacing: 0.02em;
 }
+.field select { font-family: var(--display); font-size: 22px; color: var(--ink); background: var(--panel); border: 2px solid var(--line); border-radius: 0; padding: 12px 16px; width: 100%; box-sizing: border-box; }
+.field select:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.pname { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--gold); }
 .field input:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-color: var(--muted); }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px;
@@ -155,7 +158,12 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
 
   <section id="parceiro" class="login" aria-labelledby="t-parc" hidden>
     <h1 id="t-parc">Validar código NGL Card</h1>
-    <p class="lead">Para vendas pelo WhatsApp ou a distância: peça à família o código do dia que aparece no cartão e digite abaixo.</p>
+    <p class="lead">Peça à família o código do dia que aparece no cartão, digite abaixo e registre o valor da compra para liberar o desconto.</p>
+    <p id="pnome" class="pname" hidden></p>
+    <div id="pselWrap" class="field" hidden>
+      <label for="psel">Seu estabelecimento</label>
+      <select id="psel"></select>
+    </div>
     <form id="fc" class="login" novalidate>
       <div class="field">
         <label for="cod">Código do dia</label>
@@ -164,6 +172,14 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
       <button id="val" class="btn" type="submit">Validar</button>
     </form>
     <div id="res" hidden></div>
+    <form id="fv" class="login" novalidate hidden>
+      <div class="field">
+        <label for="valor">Valor da compra (R$)</label>
+        <input id="valor" name="valor" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00" maxlength="12">
+      </div>
+      <button id="reg" class="btn" type="submit">Registrar venda</button>
+    </form>
+    <div id="res2" hidden></div>
     <button id="back" class="linkbtn" type="button">Voltar ao cartão da família</button>
   </section>
 
@@ -204,13 +220,15 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
   <footer>NGL Futsal · lista de alunos atualizada automaticamente todos os dias</footer>
 </div>
 
-<script id="ngl-dados" type="application/json">{"gerado":"2026-10-22T11:26:00-03:00","mes":"2026-10","salt":"83wb8wP1PG0pv5spcs+5yA==","iter":150000,"iterCod":20000,"codigos":{"d0cc9acd39040a0814683800e5b6632c":{"iv":"fJ8jBXLCnNiYEjdd","ct":"y13aJF0LP470IgiQryIYBNk5J2uOl/Q8n/9S1f6e564QSq84+y+UElc2mgCDKvE="}},"parceiros":[{"categoria":"Psicólogo esportivo","nome":"Fabio Galli","beneficio":"12% OFF","endereco":"Em todas as sessões para famílias NGL","instagram":"fabricadeatletas_fabiogalli","whatsapp":"(11) 99173-8936"}],"familias":{"abcd81c9eed30b82c9476f91beb84419":{"iv":"549CG9Sjze4S23bL","ct":"pd5fwv69haGqoDEYXKDnJf8XLFPaiqo3zIwXT6+7Tzz8IOr+QyApgJ4aZXzIsrUJZM7gG5VsPyMwJZ5OBiL3BnMsSLDIWYFDxIonCWCIcysTb//NjK37xkgLD2RIpbF9zc2ZXNVG+ndX6dJjrbIIJCDOhkrOH6Na67wEw5tGiG4zukACV7AOrZ6BjxBSG38n7z9xmAfrsVU="}}}</script>
+<script id="ngl-dados" type="application/json">{"gerado":"2026-10-22T17:30:00-03:00","mes":"2026-10","salt":"0c6SgNCsev9L+ZSsB+D3oQ==","iter":150000,"iterCod":20000,"codigos":{"de369760e7a1e17697708dfd3d9c4bee":{"iv":"XXfgjiowKBEPo1O+","ct":"N/pXMRQNS/WUWCtjFWG9o3yqH6ToYA3FE4f1Pl2vChRa1c8PSD9fUjK7bX3EmRwCDCjrd2QF2QSrAJQEE8OuZwuwppDsxyzaSJs="}},"parceiros":[{"id":"fabio-galli","categoria":"Psicólogo esportivo","nome":"Fabio Galli","beneficio":"12% OFF","desconto":12,"endereco":"Em todas as sessões para famílias NGL","instagram":"fabricadeatletas_fabiogalli","whatsapp":"(11) 99173-8936"}],"familias":{"f212a63d53928ace8d2b0fab8bee0fdd":{"iv":"uF9XPNlJKuUU+06t","ct":"/Tc2e+0b9yH/rALSeP/pWViQqN8cIgbcHK94QMM7PIdXycLQB21BaPaOe/FRF8oqWBKg4r5kp4ttaRwOir2Tz91zC7378+W+jnlyzF8lonjujX48DxW+Gh8BGW4QiJ/ZU+itm68myVeXjMohQngqqKSFdvEQA8hAajtGZQj2sPwKzmARMW+53Ycw7wMgGKKfTJjZLghGuMOCPO/t9oS75mCx0iyRUfTfsA2XAxKwl0W39Cs="}}}</script>
 <script>
 (function () {
   "use strict";
   var MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
   var DIAS = ["dom","seg","ter","qua","qui","sex","sáb"];
   var KEY = "ngl-card-tel";
+  var ENDPOINT = "";
+  var FAM_ID = "", PARC = null, VALIDO = null;
   var D = JSON.parse(document.getElementById("ngl-dados").textContent);
   var $ = function (id) { return document.getElementById(id); };
 
@@ -283,6 +301,9 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
       if (p.whatsapp) { var w = digits(p.whatsapp); if (w) { var a = el("a", null, "WhatsApp " + fmt(w)); a.href = "https://wa.me/55" + w + "?text=" + encodeURIComponent("Olá! Sou família NGL Futsal e quero usar o benefício do NGL Card."); a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); n++; } }
       if (p.instagram) { var ig = String(p.instagram).replace(/^@/, ""); var b2 = el("a", null, "@" + ig); b2.href = "https://instagram.com/" + encodeURIComponent(ig); b2.target = "_blank"; b2.rel = "noopener"; links.appendChild(b2); n++; }
       if (n) pi.appendChild(links);
+      Array.prototype.forEach.call(links.querySelectorAll("a"), function (a) {
+        a.addEventListener("click", function () { enviar({ tipo: "clique", parceiro: p.id, nome: p.nome, desconto: p.desconto, canal: /instagram/.test(a.href) ? "instagram" : "whatsapp", familia: FAM_ID }).catch(function () {}); });
+      });
       it.appendChild(pi);
       it.appendChild(el("span", "pb", p.beneficio || ""));
       box.appendChild(it);
@@ -300,6 +321,7 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
     var idade = (Date.now() - new Date(D.gerado).getTime()) / 36e5;
     var st = $("stale");
     if (idade > 72) { st.hidden = false; st.textContent = "Atenção: a lista de alunos não é atualizada desde " + new Date(D.gerado).toLocaleDateString("pt-BR") + ". Confirme com a NGL antes de aplicar o desconto."; }
+    FAM_ID = fam.fam || "";
     cartoes(fam); parceiros(); relogio();
     var cb = $("codebox");
     if (fam.codigo) { cb.hidden = false; $("code").textContent = fmtCod(fam.codigo); } else { cb.hidden = true; }
@@ -330,12 +352,51 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
 
   $("out").addEventListener("click", function () { store(false, null); $("app").hidden = true; $("login").hidden = false; $("tel").value = ""; $("tel").focus(); });
 
-  function telaParceiro(on) {
+  function enviar(obj) {
+    if (!ENDPOINT) return Promise.reject(new Error("sem receptor"));
+    return fetch(ENDPOINT, { method: "POST", body: JSON.stringify(obj), keepalive: true }).then(function (r) { return r.json(); });
+  }
+  function brl(n) { return Number(n).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+  function lerValor(v) {
+    var t = String(v || "").replace(/[R$\s]/g, "");
+    if (t.indexOf(",") >= 0) t = t.replace(/\./g, "").replace(",", ".");
+    var n = Number(t);
+    return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : null;
+  }
+  function acharParceiro(id) { var ps = D.parceiros || []; for (var i = 0; i < ps.length; i++) if (ps[i].id === id) return ps[i]; return null; }
+  function hashParceiro() {
+    var h = location.hash;
+    if (h === "#parceiro") return "";
+    var m = h.match(/^#parceiro-([a-z0-9-]+)$/);
+    return m ? m[1] : null;
+  }
+  function definirParceiro(p) {
+    PARC = p;
+    $("pnome").hidden = !p;
+    if (p) {
+      $("pnome").textContent = p.nome + (p.desconto ? " · " + p.desconto + "% de desconto" : "");
+      enviar({ tipo: "sync", parceiro: p.id, nome: p.nome, desconto: p.desconto }).catch(function () {});
+    }
+  }
+  function telaParceiro(on, pid) {
     $("parceiro").hidden = !on;
-    if (on) { $("login").hidden = true; $("app").hidden = true; $("res").hidden = true; $("cod").value = ""; }
+    if (on) {
+      $("login").hidden = true; $("app").hidden = true; $("res").hidden = true; $("fv").hidden = true; $("res2").hidden = true; $("cod").value = "";
+      var p = pid ? acharParceiro(pid) : null;
+      var sel = $("psel"), wrap = $("pselWrap");
+      if (p) { wrap.hidden = true; definirParceiro(p); }
+      else {
+        definirParceiro(null);
+        sel.textContent = "";
+        var o0 = el("option", null, "Escolha o seu estabelecimento"); o0.value = ""; sel.appendChild(o0);
+        (D.parceiros || []).forEach(function (q) { if (q.id) { var o = el("option", null, q.nome); o.value = q.id; sel.appendChild(o); } });
+        wrap.hidden = !(D.parceiros || []).length;
+      }
+    }
     else { $("login").hidden = false; }
   }
-  $("toPartner").addEventListener("click", function () { telaParceiro(true); $("cod").focus(); });
+  $("psel").addEventListener("change", function () { var p = acharParceiro(this.value); definirParceiro(p); if (p) $("pselWrap").hidden = false; });
+  $("toPartner").addEventListener("click", function () { telaParceiro(true, ""); $("cod").focus(); });
   $("back").addEventListener("click", function () {
     telaParceiro(false);
     var s = store(true);
@@ -346,6 +407,7 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
     ev.preventDefault();
     var c = limpaCod($("cod").value), r = $("res");
     r.hidden = false; r.className = "result no"; r.textContent = "";
+    $("fv").hidden = true; $("res2").hidden = true; VALIDO = null;
     if (c.length !== 8) { r.appendChild(el("span", "sub", "Digite os 8 caracteres do código")); return; }
     var b = $("val"); b.disabled = true; b.textContent = "Validando…";
     try {
@@ -355,7 +417,13 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
         r.className = "result ok";
         r.appendChild(el("span", "big", "Código válido"));
         r.appendChild(el("span", "sub", "Família do(a) " + info.nomes.join(" e ")));
-        r.appendChild(el("span", "sub", "Pode aplicar o desconto"));
+        if (ENDPOINT) {
+          VALIDO = info;
+          r.appendChild(el("span", "meta", "Informe o valor da compra abaixo para liberar o desconto."));
+          $("fv").hidden = false; $("valor").value = ""; setTimeout(function () { $("valor").focus(); }, 50);
+        } else {
+          r.appendChild(el("span", "sub", "Pode aplicar o desconto"));
+        }
       } else {
         r.appendChild(el("span", "big", "Código inválido"));
         r.appendChild(el("span", "sub", "Não aplique o desconto"));
@@ -364,6 +432,28 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
       r.appendChild(el("span", "meta", "LISTA NGL " + g.toLocaleDateString("pt-BR") + " · " + new Date().toLocaleString("pt-BR")));
     } catch (e) { r.appendChild(el("span", "sub", "Não foi possível validar neste navegador. Tente pelo Chrome ou Safari.")); }
     finally { b.disabled = false; b.textContent = "Validar"; }
+  });
+  $("fv").addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    var r = $("res2"); r.hidden = false; r.className = "result no"; r.textContent = "";
+    if (!PARC) { r.appendChild(el("span", "sub", "Escolha o seu estabelecimento no topo da tela")); $("psel").focus(); return; }
+    if (!VALIDO) { r.appendChild(el("span", "sub", "Valide o código da família primeiro")); return; }
+    var v = lerValor($("valor").value);
+    if (!v) { r.appendChild(el("span", "sub", "Digite o valor da compra, por exemplo 350,00")); $("valor").focus(); return; }
+    var b = $("reg"); b.disabled = true; b.textContent = "Registrando…";
+    try {
+      var resp = await enviar({ tipo: "venda", parceiro: PARC.id, nome: PARC.nome, desconto: PARC.desconto, valor: v, familia: VALIDO.fam || "" });
+      if (!resp || !resp.ok) throw new Error("recusado");
+      r.className = "result ok";
+      r.appendChild(el("span", "big", "Venda registrada"));
+      r.appendChild(el("span", "sub", brl(resp.valor) + (resp.pct ? " · desconto de " + resp.pct + "% = " + brl(resp.desconto) : "")));
+      r.appendChild(el("span", "sub", "Pode aplicar o desconto"));
+      r.appendChild(el("span", "meta", new Date().toLocaleString("pt-BR")));
+      $("fv").hidden = true; VALIDO = null; $("cod").value = "";
+    } catch (e) {
+      r.appendChild(el("span", "sub", "A venda não foi registrada"));
+      r.appendChild(el("span", "meta", "Confira a internet e toque em Registrar venda de novo. O desconto só vale depois do registro."));
+    } finally { b.disabled = false; b.textContent = "Registrar venda"; }
   });
   $("copy").addEventListener("click", function () {
     var t = $("code").textContent, btn = this;
@@ -376,8 +466,8 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
   parceiros();
 
   var salvo = store(true);
-  window.addEventListener("hashchange", function () { if (location.hash === "#parceiro") telaParceiro(true); });
-  if (location.hash === "#parceiro") { telaParceiro(true); }
+  window.addEventListener("hashchange", function () { var h = hashParceiro(); if (h !== null) telaParceiro(true, h); });
+  if (hashParceiro() !== null) { telaParceiro(true, hashParceiro()); }
   else if (salvo && digits(salvo)) {
     $("tel").value = fmt(salvo);
     abrir(salvo).then(function (fam) { if (fam) mostrar(fam); }).catch(function () {});

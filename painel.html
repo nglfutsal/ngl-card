@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Painel NGL Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300..700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: faixa royal no topo, número principal (faturamento gerado) em destaque, grade de indicadores, barras por mês, tabela por parceiro (geral) e últimas vendas. Visual "Noite" da marca NGL. */
+:root {
+  --night: #020058; --indigo: #302c80; --panel: #1d1e76; --royal: #0152be;
+  --ink: #ffffff; --muted: #a9b3e0; --muted-2: #c9d3ee; --gold: #fbb03b;
+  --done: #01b43a; --on-status: #020058; --line: #ffffff33;
+  --it-green: #178b38; --it-red: #e21815;
+  --display: "Yanone Kaffeesatz", "Arial Narrow", sans-serif;
+  --data: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; background: var(--night); color: var(--ink); }
+body {
+  font-family: var(--display); font-size: 20px; line-height: 1.35;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: max(20px, env(safe-area-inset-top, 0px)) 48px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }
+.banner { display: inline-flex; align-items: center; background: var(--royal); font-weight: 700; font-style: italic; letter-spacing: 0.12em; text-transform: uppercase; font-size: 26px; line-height: 1; padding: 12px 48px 12px max(16px, env(safe-area-inset-left, 0px)); clip-path: polygon(0 0, 100% 0, calc(100% - 36px) 100%, 0 100%); }
+.sig { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); text-align: right; }
+h1, h2 { margin: 0; font-weight: 700; text-transform: uppercase; line-height: 1; text-wrap: balance; }
+h1 { font-size: 46px; }
+h2 { font-size: 26px; }
+.tricolor { display: block; height: 5px; width: 140px; background: linear-gradient(90deg, var(--it-green) 0 33.333%, var(--ink) 33.333% 66.666%, var(--it-red) 66.666% 100%); }
+.label { font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-family: var(--data); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted-2); text-transform: uppercase; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: var(--done); margin-right: 6px; animation: pulse 1.6s ease-in-out infinite; }
+.dot.off { background: var(--muted); animation: none; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.tabs { display: inline-flex; align-self: flex-start; border: 2px solid var(--line); }
+.tabs button { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: transparent; border: 0; padding: 8px 16px; min-height: 44px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--night); }
+.tabs button:focus-visible, .copy:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; }
+.big { background: var(--indigo); padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
+.big .n { font-size: 72px; font-weight: 700; line-height: 0.95; color: var(--gold); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.big .s { font-size: 18px; color: var(--muted-2); }
+.roi { background: var(--panel); border: 1px solid var(--line); padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.roi .n { font-size: 56px; font-weight: 700; line-height: 0.95; font-variant-numeric: tabular-nums; }
+.roi .s { font-size: 18px; color: var(--muted-2); }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 5px solid var(--royal); }
+.kpi { padding: 16px 16px 16px 0; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--line); }
+.kpi .n { font-size: 40px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 15px; color: var(--muted); line-height: 1.2; }
+
+.chart { background: var(--panel); border: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart .axis { fill: var(--muted); font-family: var(--data); font-size: 11px; }
+.chart .val { fill: var(--ink); font-family: var(--display); font-size: 15px; font-weight: 700; }
+
+.tablebox { overflow-x: auto; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 760px; }
+th, td { text-align: right; padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 14px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--panel); }
+th:first-child, td:first-child { text-align: left; }
+td { font-size: 20px; }
+td.nome { font-weight: 700; text-transform: uppercase; white-space: normal; min-width: 160px; }
+.copy { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); background: transparent; border: 2px solid var(--muted); padding: 6px 12px; min-height: 40px; cursor: pointer; }
+.list { display: flex; flex-direction: column; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--line); flex-wrap: wrap; }
+.row .d { font-family: var(--data); font-size: 13px; color: var(--muted-2); }
+.row .p { font-weight: 700; text-transform: uppercase; flex: 1 1 140px; min-width: 0; }
+.row .v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.row .x { font-size: 16px; color: var(--gold); font-variant-numeric: tabular-nums; }
+.empty { font-size: 18px; color: var(--muted-2); padding: 16px; border: 1px dashed var(--line); }
+.msg { font-size: 20px; padding: 20px; background: var(--panel); border: 1px solid var(--line); }
+.note { font-size: 16px; color: var(--muted); max-width: 70ch; }
+section { display: flex; flex-direction: column; gap: 14px; }
+@media (max-width: 760px) {
+  h1 { font-size: 38px; }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .big .n { font-size: 56px; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="banner">NGL Card</span>
+    <span class="sig">Nucleo Gabriel Lima</span>
+  </div>
+
+  <div class="head">
+    <span id="kicker" class="label">Painel de resultados</span>
+    <h1 id="titulo">Retorno das parcerias</h1>
+    <span class="tricolor"></span>
+    <div class="status">
+      <span><span id="dot" class="dot off" aria-hidden="true"></span><span id="upd">Carregando…</span></span>
+      <span>Atualiza sozinho a cada minuto</span>
+    </div>
+  </div>
+
+  <p id="erro" class="msg" hidden></p>
+
+  <div id="conteudo" hidden>
+    <div class="wrap" style="gap:28px">
+      <div class="tabs" role="group" aria-label="Período">
+        <button id="t-mes" type="button" aria-pressed="true">Este mês</button>
+        <button id="t-tudo" type="button" aria-pressed="false">Desde o início</button>
+      </div>
+
+      <div class="hero">
+        <div class="big">
+          <span class="label">Faturamento gerado pelas famílias NGL</span>
+          <span id="k-fat" class="n">R$ 0</span>
+          <span id="k-fat-s" class="s"></span>
+        </div>
+        <div class="roi">
+          <span class="label">Retorno do desconto</span>
+          <span id="k-roi" class="n">–</span>
+          <span id="k-roi-s" class="s">Vendas geradas para cada R$ 1 concedido em desconto</span>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><span id="k-vendas" class="n">0</span><span class="s">Vendas validadas</span></div>
+        <div class="kpi"><span id="k-leads" class="n">0</span><span class="s">Contatos enviados pelo cartão (WhatsApp e Instagram)</span></div>
+        <div class="kpi"><span id="k-ticket" class="n">R$ 0</span><span class="s">Ticket médio</span></div>
+        <div class="kpi"><span id="k-desc" class="n">R$ 0</span><span class="s">Desconto concedido às famílias</span></div>
+        <div class="kpi"><span id="k-fam" class="n">0</span><span class="s">Famílias atendidas</span></div>
+        <div class="kpi"><span id="k-rec" class="n">0</span><span class="s">Famílias que voltaram a comprar</span></div>
+      </div>
+
+      <section aria-labelledby="h-mes">
+        <h2 id="h-mes">Faturamento por mês</h2>
+        <div id="chart" class="chart"></div>
+      </section>
+
+      <section id="sec-parc" aria-labelledby="h-parc" hidden>
+        <h2 id="h-parc">Por parceiro</h2>
+        <p class="note">Cada parceiro tem um link próprio de painel com os números só dele. Use "Copiar link" para enviar.</p>
+        <div class="tablebox">
+          <table>
+            <thead><tr><th>Parceiro</th><th>Faturamento</th><th>Vendas</th><th>Contatos</th><th>Desconto</th><th>Retorno</th><th>Famílias</th><th>Painel</th></tr></thead>
+            <tbody id="tb"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-ult">
+        <h2 id="h-ult">Últimas vendas</h2>
+        <div id="ult" class="list"></div>
+      </section>
+
+      <p class="note">Valores informados pelo parceiro no momento da validação do NGL Card. Nenhum nome ou telefone de família é armazenado.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var ENDPOINT = "";
+  var MESES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  var $ = function (id) { return document.getElementById(id); };
+  var DADOS = null, PERIODO = "mes";
+
+  function chave() { var m = location.hash.match(/^#k-([a-z0-9]+)$/); return m ? m[1] : ""; }
+  function brl(n, cent) { return Number(n || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: cent ? 2 : 0, maximumFractionDigits: cent ? 2 : 0 }); }
+  function int(n) { return Number(n || 0).toLocaleString("pt-BR"); }
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function mesAtual() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2); }
+  function nomeMes(ym) { var p = ym.split("-"); return MESES[+p[1] - 1] + "/" + p[0].slice(2); }
+  function vazio() { return { leads: 0, vendas: 0, faturamento: 0, desconto: 0, ticket: 0, familias: 0, recorrentes: 0, retorno: null }; }
+
+  function erro(t) { $("erro").hidden = false; $("erro").textContent = t; $("conteudo").hidden = true; $("dot").className = "dot off"; $("upd").textContent = "Sem conexão"; }
+
+  async function carregar() {
+    var k = chave();
+    if (!k) { erro("Este link de painel está incompleto. Use o link exato que a NGL enviou."); return; }
+    if (!ENDPOINT) { erro("O painel ainda não foi ligado ao registro de vendas."); return; }
+    try {
+      var r = await fetch(ENDPOINT + "?k=" + encodeURIComponent(k), { cache: "no-store" });
+      var d = await r.json();
+      if (!d.ok) { erro(d.erro === "chave" ? "Link de painel não reconhecido. Peça um link novo à NGL." : "Não foi possível carregar os números agora."); return; }
+      DADOS = d; $("erro").hidden = true; desenhar();
+      $("dot").className = "dot"; $("upd").textContent = "Atualizado às " + new Date().toLocaleTimeString("pt-BR");
+    } catch (e) {
+      if (DADOS) { $("dot").className = "dot off"; $("upd").textContent = "Sem conexão · mostrando a última leitura"; }
+      else erro("Não foi possível carregar os números agora. Confira a internet; a página tenta de novo sozinha.");
+    }
+  }
+
+  function desenhar() {
+    var d = DADOS;
+    $("conteudo").hidden = false;
+    if (d.escopo === "parceiro" && d.parceiro) {
+      $("kicker").textContent = "Painel do parceiro";
+      $("titulo").textContent = d.parceiro.nome;
+      document.title = "NGL Card · " + d.parceiro.nome;
+    } else {
+      $("kicker").textContent = "Painel geral";
+      $("titulo").textContent = "Retorno das parcerias";
+    }
+    var t = PERIODO === "mes" ? ((d.porMes || []).filter(function (m) { return m.mes === mesAtual(); })[0] || vazio()) : d.totais;
+    $("k-fat").textContent = brl(t.faturamento);
+    $("k-fat-s").textContent = int(t.vendas) + (t.vendas === 1 ? " venda validada" : " vendas validadas") + (PERIODO === "mes" ? " em " + nomeMes(mesAtual()) : " desde o início");
+    $("k-roi").textContent = t.retorno ? brl(t.retorno, true) : "–";
+    $("k-vendas").textContent = int(t.vendas);
+    $("k-leads").textContent = int(t.leads);
+    $("k-ticket").textContent = brl(t.ticket);
+    $("k-desc").textContent = brl(t.desconto);
+    $("k-fam").textContent = int(t.familias);
+    $("k-rec").textContent = int(t.recorrentes);
+    grafico(d.porMes || []);
+    tabela(d);
+    ultimas(d);
+  }
+
+  function grafico(meses) {
+    var box = $("chart"); box.textContent = "";
+    var ult = meses.slice(-12);
+    if (!ult.length || !ult.some(function (m) { return m.faturamento > 0; })) { box.appendChild(el("p", "empty", "As barras aparecem a partir da primeira venda registrada.")); return; }
+    var W = 720, H = 260, pl = 8, pr = 8, pt = 28, pb = 30;
+    var max = Math.max.apply(null, ult.map(function (m) { return m.faturamento; })) || 1;
+    var bw = (W - pl - pr) / ult.length;
+    var ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Faturamento por mês: " + ult.map(function (m) { return nomeMes(m.mes) + " " + brl(m.faturamento); }).join(", "));
+    var base = document.createElementNS(ns, "line");
+    base.setAttribute("x1", pl); base.setAttribute("x2", W - pr); base.setAttribute("y1", H - pb); base.setAttribute("y2", H - pb);
+    base.setAttribute("stroke", "#ffffff33"); svg.appendChild(base);
+    ult.forEach(function (m, i) {
+      var h = Math.max(2, (H - pt - pb) * (m.faturamento / max));
+      var w = Math.min(bw * 0.64, 72), x = pl + i * bw + (bw - w) / 2, y = H - pb - h;
+      var r = document.createElementNS(ns, "rect");
+      r.setAttribute("x", x); r.setAttribute("y", y); r.setAttribute("width", w); r.setAttribute("height", h);
+      r.setAttribute("fill", m.mes === mesAtual() ? "#fbb03b" : "#0152be"); svg.appendChild(r);
+      var v = document.createElementNS(ns, "text");
+      v.setAttribute("x", x + w / 2); v.setAttribute("y", y - 8); v.setAttribute("text-anchor", "middle"); v.setAttribute("class", "val");
+      v.textContent = m.faturamento >= 1000 ? "R$ " + (m.faturamento / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " mil" : brl(m.faturamento);
+      svg.appendChild(v);
+      var l = document.createElementNS(ns, "text");
+      l.setAttribute("x", x + w / 2); l.setAttribute("y", H - 10); l.setAttribute("text-anchor", "middle"); l.setAttribute("class", "axis");
+      l.textContent = nomeMes(m.mes).toUpperCase(); svg.appendChild(l);
+    });
+    box.appendChild(svg);
+  }
+
+  function tabela(d) {
+    var sec = $("sec-parc");
+    if (d.escopo !== "geral") { sec.hidden = true; return; }
+    sec.hidden = false;
+    var tb = $("tb"); tb.textContent = "";
+    var ps = d.parceiros || [];
+    if (!ps.length) { var tr0 = el("tr"), td0 = el("td", null, "Nenhum parceiro registrado ainda. Eles aparecem aqui quando abrem o link de validação pela primeira vez."); td0.colSpan = 8; td0.style.whiteSpace = "normal"; td0.style.textAlign = "left"; tr0.appendChild(td0); tb.appendChild(tr0); return; }
+    ps.forEach(function (p) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "nome", p.nome));
+      tr.appendChild(el("td", null, brl(p.faturamento)));
+      tr.appendChild(el("td", null, int(p.vendas)));
+      tr.appendChild(el("td", null, int(p.leads)));
+      tr.appendChild(el("td", null, brl(p.desconto)));
+      tr.appendChild(el("td", null, p.retorno ? brl(p.retorno, true) : "–"));
+      tr.appendChild(el("td", null, int(p.familias)));
+      var td = el("td");
+      if (p.chave) {
+        var b = el("button", "copy", "Copiar link"); b.type = "button";
+        b.addEventListener("click", function () {
+          var url = location.href.split("#")[0] + "#k-" + p.chave;
+          function ok() { b.textContent = "Link copiado"; setTimeout(function () { b.textContent = "Copiar link"; }, 2000); }
+          try { navigator.clipboard.writeText(url).then(ok, function () { b.textContent = url; }); } catch (e) { b.textContent = url; }
+        });
+        td.appendChild(b);
+      } else td.textContent = "–";
+      tr.appendChild(td);
+      tb.appendChild(tr);
+    });
+  }
+
+  function ultimas(d) {
+    var box = $("ult"); box.textContent = "";
+    var us = d.ultimas || [];
+    if (!us.length) { box.appendChild(el("p", "empty", "Nenhuma venda registrada ainda. Assim que um parceiro validar um NGL Card com o valor da compra, ela aparece aqui.")); return; }
+    us.forEach(function (u) {
+      var r = el("div", "row");
+      var dt = new Date(u.data);
+      r.appendChild(el("span", "d", dt.toLocaleDateString("pt-BR") + " " + dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+      r.appendChild(el("span", "p", u.parceiro || ""));
+      r.appendChild(el("span", "v", brl(u.valor, true)));
+      r.appendChild(el("span", "x", "desconto " + brl(u.desconto, true)));
+      box.appendChild(r);
+    });
+  }
+
+  $("t-mes").addEventListener("click", function () { PERIODO = "mes"; this.setAttribute("aria-pressed", "true"); $("t-tudo").setAttribute("aria-pressed", "false"); if (DADOS) desenhar(); });
+  $("t-tudo").addEventListener("click", function () { PERIODO = "tudo"; this.setAttribute("aria-pressed", "true"); $("t-mes").setAttribute("aria-pressed", "false"); if (DADOS) desenhar(); });
+  window.addEventListener("hashchange", carregar);
+  carregar();
+  setInterval(function () { if (!document.hidden) carregar(); }, 60000);
+})();
+</script>
+</body>
+</html>
