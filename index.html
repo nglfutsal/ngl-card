@@ -111,13 +111,18 @@ p { margin: 0; }
 .partners { display: flex; flex-direction: column; gap: 12px; }
 .partners .title { display: inline-flex; flex-direction: column; gap: 6px; align-self: flex-start; }
 .plist { display: flex; flex-direction: column; gap: 8px; }
-.pitem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--panel); border: 1px solid var(--line); padding: 12px 16px; }
-.pitem .pi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pitem { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; background: var(--panel); border: 1px solid var(--line); padding: 12px 16px; }
+.pitem .pi { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.pitem .lg { flex: none; width: 56px; height: 56px; border-radius: 50%; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; align-self: flex-start; }
+.pitem .lg img { width: 100%; height: 100%; object-fit: cover; }
+.pitem .lg.mono { background: var(--royal); color: #fff; font-weight: 700; font-size: 24px; letter-spacing: .02em; }
+.pitem .cat { display: inline-flex; align-items: center; gap: 6px; }
+.pitem .cat svg { flex: none; }
 .pitem .pn { font-size: 22px; font-weight: 700; text-transform: uppercase; line-height: 1.05; }
 .pitem .pa { font-size: 15px; color: var(--muted); line-height: 1.2; }
-.pitem .pb { font-size: 22px; font-weight: 700; color: var(--gold); text-align: right; }
+.pitem .pb { font-size: 22px; font-weight: 700; color: var(--gold); text-align: right; white-space: nowrap; flex: none; padding-top: 2px; }
 .pitem .pl { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 4px; }
-.pitem .pl a { font-size: 16px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; }
+.pitem .pl a { font-size: 16px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; overflow-wrap: anywhere; }
 .pitem .pl a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .empty { font-size: 18px; color: var(--muted-2); padding: 14px 16px; border: 1px dashed var(--line); }
 
@@ -220,7 +225,7 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
   <footer>NGL Futsal · lista de alunos atualizada automaticamente todos os dias</footer>
 </div>
 
-<script id="ngl-dados" type="application/json">{"gerado":"2026-10-29T15:20:00-03:00","mes":"2026-10","salt":"f8G5Zj7gyT4ojzBOqvKIjA==","iter":150000,"iterCod":20000,"codigos":{"9df40e50915446842e56dd817c8191d4":{"iv":"77yp4uGaPsp+eumU","ct":"fmuqikm2trW7u1xEQzfIkph3FmBkyKDiXeq7haFNrmK13X0/UAAIc9hPyPOGwnfKb0I52MevmnkfMzJd2TXhf2ZCrNWAbAu3P2Y="}},"parceiros":[{"id":"beef-station","categoria":"Restaurante","nome":"Beef Station","beneficio":"20% OFF","desconto":20,"instagram":"beefstationmorumbi","whatsapp":"(11) 91646-2158"},{"id":"fabio-galli","categoria":"Psicólogo esportivo","nome":"Fabio Galli","beneficio":"12% OFF","desconto":12,"endereco":"Em todas as sessões para famílias NGL","instagram":"fabricadeatletas_fabiogalli","whatsapp":"(11) 99173-8936"},{"id":"le-gioie-semijoias","categoria":"Acessórios femininos","nome":"Le Gioie Semijoias","beneficio":"20% OFF","desconto":20,"instagram":"legioieoficial","whatsapp":"(11) 93077-1987"}],"familias":{"0de23439d960e0eeedd39fffba4908d0":{"iv":"u5r1GEWcmeh6FiMB","ct":"cKYN/eqMmFUBZp4Q0rPIK47m2HgwYh3+5I+c+Lb+67v50L2UjpQxsjIFFphDsPItOxDoEYkg4TsYeAcQA4YGvKq1tnkeY1uGTEceYurPb9W+h8ozmhVOAIdN2M7R9GncrU8rySWL+xgRxZlnb4ncMHdZzEipo0jxVFXm1sCCCsrhCHHQaFNpC3oFJ9Ohly5+XwNHHY3nUkl9G5DnJ4wuYtG8oSU9l/FZj6Un8WIk8V4xTZs="}}}</script>
+<script id="ngl-dados" type="application/json">{"gerado":"2026-10-29T15:20:00-03:00","mes":"2026-10","salt":"cpGNmQsu3dRtPYnu25bDuQ==","iter":150000,"iterCod":20000,"codigos":{"73eee949821b40029a3ae817d5db3065":{"iv":"7d+nKOsoW+8wJNeX","ct":"/R2NT9CBTLUl+X0A1U9YppSJXsr9iqEakWNKM7qUp45T+bhfv+4NMkobnE/mOiHzTonWn31RntxdwLKjtzUrNRC9x4/KJCWnB4M="}},"parceiros":[{"id":"beef-station","categoria":"Restaurante","nome":"Beef Station","beneficio":"20% OFF","desconto":20,"instagram":"beefstationmorumbi","whatsapp":"(11) 91646-2158"},{"id":"fabio-galli","categoria":"Psicólogo esportivo","nome":"Fabio Galli","beneficio":"12% OFF","desconto":12,"endereco":"Em todas as sessões para famílias NGL","instagram":"fabricadeatletas_fabiogalli","whatsapp":"(11) 99173-8936"},{"id":"le-gioie-semijoias","categoria":"Acessórios femininos","nome":"Le Gioie Semijoias","beneficio":"20% OFF","desconto":20,"instagram":"legioieoficial","whatsapp":"(11) 93077-1987","logo":"logos/le-gioie.png"}],"familias":{"28626cb2953dc9c022dd287463594e3f":{"iv":"pW7f1XYScR0daG1W","ct":"syGVxLE5d0hzubuyhnAViJ7/gkylGUSglZUQqHdGU/B/OmHanmzA1zbaTkNWByxME0JccutScssl5ei3D+Aa3yeTWLFyHPBMUB86/y6m/Wddox88DHTUX4HbY4mmWbAkRlSRecwOPAh5jNz4HU/ch57ohfzZNUlVCepD8KZnnKpeXQBO/WycO8MbGA0TUwo8uMJEc+b4JCfjIQ8sC6uiFTn4xuhPIQTfTpWL3rMvzck+L8Q="}}}</script>
 <script>
 (function () {
   "use strict";
@@ -288,18 +293,33 @@ footer { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; col
     });
   }
 
+  function iniciais(n) { return String(n || "").split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase(); }
+  function icone(cat) {
+    var c = String(cat).toLowerCase(), d;
+    if (/restaur|lanch|aça|café|pizza|hamb|comida|bar\b/.test(c)) d = '<path d="M7 3v8a2 2 0 0 0 4 0V3M9 3v18M17 3c-1.7 0-3 2-3 5v5h3v8"/>';
+    else if (/psic|terap|mental/.test(c)) d = '<path d="M12 3v18M7 21h10M5 6c0 4 3 7 7 7s7-3 7-7M5 6V4M19 6V4"/>';
+    else if (/acess|joia|semijoia|bijou|moda|roupa/.test(c)) d = '<path d="M6 4h12l3 5-9 11L3 9z M3 9h18 M9 4l3 16 3-16"/>';
+    else if (/fisio|saúde|saude|clín|clin|médic|medic|odonto/.test(c)) d = '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/>';
+    else if (/esport|academ|fitness|loja/.test(c)) d = '<path d="M4 7h16l-1 13H5z M9 7a3 3 0 0 1 6 0"/>';
+    else d = '<path d="M3 12l9-9h8v8l-9 9z M15.5 8.5h.01"/>';
+    return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  }
   function parceiros() {
     var box = $("plist"); box.textContent = "";
     var ps = D.parceiros || [];
     if (!ps.length) { box.appendChild(el("p", "empty", "Os primeiros parceiros entram em breve. A lista aparece aqui assim que forem confirmados.")); return; }
     ps.forEach(function (p) {
       var it = el("div", "pitem"), pi = el("div", "pi");
-      if (p.categoria) pi.appendChild(el("span", "label", p.categoria));
+      var lg = el("div", "lg");
+      if (p.logo) { var im = document.createElement("img"); im.src = p.logo; im.alt = ""; im.onerror = function () { lg.className = "lg mono"; lg.textContent = iniciais(p.nome); }; lg.appendChild(im); }
+      else { lg.className = "lg mono"; lg.textContent = iniciais(p.nome); }
+      it.appendChild(lg);
+      if (p.categoria) { var ct = el("span", "label cat"); ct.innerHTML = icone(p.categoria); ct.appendChild(document.createTextNode(p.categoria)); pi.appendChild(ct); }
       pi.appendChild(el("span", "pn", p.nome));
       if (p.endereco) pi.appendChild(el("span", "pa", p.endereco));
       var links = el("div", "pl"), n = 0;
-      if (p.whatsapp) { var w = digits(p.whatsapp); if (w) { var a = el("a", null, "WhatsApp " + fmt(w)); a.href = "https://wa.me/55" + w + "?text=" + encodeURIComponent("Olá! Sou família NGL Futsal e quero usar o benefício do NGL Card."); a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); n++; } }
-      if (p.instagram) { var ig = String(p.instagram).replace(/^@/, ""); var b2 = el("a", null, "@" + ig); b2.href = "https://instagram.com/" + encodeURIComponent(ig); b2.target = "_blank"; b2.rel = "noopener"; links.appendChild(b2); n++; }
+      if (p.whatsapp) { var w = digits(p.whatsapp); if (w) { var a = el("a", null, "WhatsApp"); a.setAttribute("aria-label", "WhatsApp " + fmt(w)); a.href = "https://wa.me/55" + w + "?text=" + encodeURIComponent("Olá! Sou família NGL Futsal e quero usar o benefício do NGL Card."); a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); n++; } }
+      if (p.instagram) { var ig = String(p.instagram).replace(/^@/, ""); var b2 = el("a", null, "Instagram"); b2.setAttribute("aria-label", "Instagram @" + ig); b2.href = "https://instagram.com/" + encodeURIComponent(ig); b2.target = "_blank"; b2.rel = "noopener"; links.appendChild(b2); n++; }
       if (n) pi.appendChild(links);
       Array.prototype.forEach.call(links.querySelectorAll("a"), function (a) {
         a.addEventListener("click", function () { enviar({ tipo: "clique", parceiro: p.id, nome: p.nome, desconto: p.desconto, canal: /instagram/.test(a.href) ? "instagram" : "whatsapp", familia: FAM_ID }).catch(function () {}); });
